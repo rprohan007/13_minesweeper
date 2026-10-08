@@ -1,98 +1,153 @@
 # Scenario 13 — Minesweeper
 
-A modular terminal Minesweeper game with hidden mines, reveal expansion, and flags.
+A modular terminal-based Minesweeper game featuring hidden mines, safe-cell reveals, flood-fill expansion, and flags.
 
 ## Objective
 
-Inspect the supplied starter, understand how the modules interact, reproduce the
-existing defect, and then extend the game through four tasks. The assignment is
-designed to test debugging, reasoning about state, and careful review of LLM-generated code.
+Inspect the supplied starter code, understand how the modules interact, reproduce the original defect, and extend the game through four tasks. This assignment tests debugging, reasoning about state, and careful review of LLM-generated code.
 
-## Provided files
+## Provided Files
 
-- `main.py` — entry point.
-- `game.py` — command handling and game flow.
-- `board.py` — board state, neighbours, mines, revealing, and flags.
-- `requirements.txt` — dependency declaration.
+* `main.py` — Entry point.
+* `game.py` — Command handling and game flow.
+* `board.py` — Board state, neighbours, mines, revealing, and flags.
+* `requirements.txt` — Dependency declaration.
 
 ## Setup
 
-Use Python 3.9 or newer:
+Use Python 3.9 or newer.
+
+Run the game using:
 
 ```bash
-python main.py
+python3 main.py
 ```
 
-No package installation is required.
+No additional package installation is required.
 
-## Before changing the code
+## Before Changing the Code
 
-Run the untouched starter, read all three Python files, play several turns, and trace
-one reveal from the command line through the board logic. Reproduce the Task 1 defect
-before attempting to fix it.
+1. Run the untouched starter code.
+2. Read all three Python files.
+3. Play several turns and observe the behaviour.
+4. Trace a reveal command from the command line through the board logic.
+5. Reproduce the Task 1 defect before attempting to fix it.
 
-## Task 1 — Boundary-safe board traversal
+## Tasks and Implemented Features
 
-Correct the neighbour traversal so every coordinate visited by reveal and mine-counting
-logic is a valid board coordinate. Flood-fill must work correctly from corners, edges,
-and interior cells without exceptions or phantom cells.
+### Task 1 — Boundary-Safe Board Traversal
 
-**Done when:** all valid reveals stay within the board and zero-adjacent regions expand
-correctly from every edge and corner.
+**Objective:** Ensure every coordinate visited by reveal and mine-counting logic is a valid board coordinate.
 
-## Task 2 — Complete win and flag behaviour
+**Implementation:**
 
-Keep the existing flag command and make the game recognise a win only when every
-non-mine cell has been revealed. Revealing a flagged cell must not accidentally change
-its state.
+* Corrected neighbour traversal to prevent out-of-bounds coordinates.
+* Ensured adjacent-mine counting uses valid neighbouring cells.
+* Improved flood-fill behaviour for corners, edges, and interior cells.
+* Prevented flood-fill from revealing flagged cells.
 
-**Done when:** flags can be toggled, invalid actions do not corrupt state, and a
-complete safe reveal ends the game correctly.
+**Done when:** Valid reveals stay within the board, and zero-adjacent regions expand correctly from edges and corners.
 
-## Task 3 — Difficulty modes
+### Task 2 — Complete Win and Flag Behaviour
 
-Add Easy, Medium, and Hard modes with different dimensions and mine counts. The mode
-selection must happen in memory and must not require a new data file.
+**Objective:** Ensure flags and the win condition behave correctly.
 
-**Done when:** each mode produces a valid board and all existing commands continue to work.
+**Implementation:**
 
-## Task 4 — Action-level feedback
+* Preserved the existing flag command.
+* Supported placing and removing flags.
+* Prevented flagged cells from being revealed.
+* Checked for a win when every non-mine cell has been revealed.
+* Prevented invalid actions from corrupting board state.
 
-Add concise feedback for a player's reveal action. A single reveal that expands through
-many zero cells should still count as one player action; internal flood-fill iterations
-must not produce repeated player-facing feedback.
+**Done when:** Flags can be toggled, invalid actions do not corrupt state, and revealing all safe cells ends the game correctly.
 
-**Done when:** feedback is tied to actual commands, not internal loops.
+### Task 3 — Difficulty Modes
 
-## Required testing
+**Objective:** Add Easy, Medium, and Hard modes without requiring additional data files.
 
-Test corners, edges, centre cells, zero-adjacent regions, mine hits, repeated reveals,
-flag toggling, invalid coordinates, invalid commands, every difficulty, and a complete win.
+**Implementation:**
 
+* Added a difficulty-selection menu.
+* Configured different board dimensions and mine counts for each mode.
+* Kept board state in memory.
+* Preserved reveal and flag commands across difficulty levels.
 
-## LLM usage
+**Done when:** Every mode produces a valid board, and the existing commands continue to work.
 
-You may use an LLM during the lab. The goal is to use it as a coding assistant while
-retaining responsibility for understanding and testing the result.
+### Task 4 — Action-Level Feedback
 
-- Inspect the existing code before asking for changes.
-- Ask for explanations when you do not understand a proposed change.
-- Test generated code against the stated behaviour and edge cases.
-- Keep your complete LLM chat history for submission.
-- Do not replace the whole project with an unrelated implementation.
-- Keep all state in memory; do not add CSV, JSON, SQLite, or other persistence.
+**Objective:** Provide concise feedback for each player reveal action.
 
-## Submission checklist
+**Implementation:**
 
-- [ ] Task 1 completed and the original defect was reproduced and fixed.
-- [ ] Tasks 2–4 completed and tested.
-- [ ] Boundary and invalid-input cases tested.
-- [ ] No unnecessary external dependencies added.
-- [ ] No persistent storage added.
-- [ ] Code remains understandable and modular.
-- [ ] Complete LLM chat-history link included.
+* Added feedback for safe reveals and adjacent-mine counts.
+* Added feedback when a zero-adjacent region expands.
+* Kept player-facing feedback outside the internal flood-fill loop.
+* Added messages for invalid commands, invalid coordinates, and attempts to reveal flagged or already-revealed cells.
 
-## Folder structure
+**Done when:** Feedback is tied to actual player commands rather than individual flood-fill iterations.
+
+## Commands
+
+| Command     | Description            |
+| ----------- | ---------------------- |
+| `r row col` | Reveal a cell          |
+| `f row col` | Place or remove a flag |
+| `q`         | Quit the game          |
+
+Coordinates start at `1`. Select a difficulty when prompted at the beginning of the game.
+
+## Required Testing
+
+Use the following checklist to verify the implementation.
+
+* [ ] Corner cells.
+* [ ] Edge cells.
+* [ ] Centre cells.
+* [ ] Zero-adjacent regions and flood-fill expansion.
+* [ ] Mine hits.
+* [ ] Repeated reveals.
+* [ ] Flag placement and removal.
+* [ ] Attempts to reveal flagged cells.
+* [ ] Invalid coordinates and invalid commands.
+* [ ] Easy, Medium, and Hard difficulty modes.
+* [ ] Winning by revealing every non-mine cell.
+* [ ] Feedback appears once per player reveal command.
+
+Record the results of your tests and investigate any unexpected behaviour before submission.
+
+## LLM Usage
+
+An LLM may be used as a coding assistant, while the student remains responsible for understanding and testing the result.
+
+* Inspect the existing code before requesting changes.
+* Ask for explanations when a proposed change is unclear.
+* Test generated code against the stated behaviour and edge cases.
+* Keep the complete LLM chat history for submission.
+* Do not replace the project with an unrelated implementation.
+* Keep all game state in memory. Do not add CSV, JSON, SQLite, or other persistence.
+
+## Submission Checklist
+
+* [ ] Task 1 completed; the original defect was reproduced and fixed.
+* [ ] Tasks 2–4 completed and tested.
+* [ ] Boundary and invalid-input cases tested.
+* [ ] No unnecessary external dependencies added.
+* [ ] No persistent storage added.
+* [ ] Code remains understandable and modular.
+* [ ] Complete LLM chat-history link included.
+* [ ] Before and after gameplay recordings prepared.
+
+## Submission Deliverables
+
+Submit only these three items:
+
+1. **Before video:** A 10-second gameplay recording showing the original bug or broken behaviour before changes.
+2. **After video:** A 10-second gameplay recording showing the bug fixed and the new features working.
+3. **Chat/LLM link:** A link to the conversation page containing the complete chat history.
+
+## Folder Structure
 
 ```text
 scenario-01-minesweeper/
@@ -103,10 +158,8 @@ scenario-01-minesweeper/
 └── board.py
 ```
 
-## Submission Checklist
+## LLM Conversation Link
 
-Submission is only the following three things:
+Add the shareable link to the complete ChatGPT conversation here:
 
-- [ ] A 10-second video of gameplay **before** your changes, showing the bug/broken behavior
-- [ ] A 10-second video of gameplay **after** your changes, showing the bug fixed and the new features working
-- [ ] The Chat/LLM used page link, with the complete chat history
+(https://chatgpt.com/share/6ac73187-358c-83e8-a586-4b31e6965b60)
